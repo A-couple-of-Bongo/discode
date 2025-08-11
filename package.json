@@ -1,0 +1,23 @@
+{
+  "name": "discode",
+  "version": "1.0.0",
+  "description": "A Leetcode integration with Discord",
+  "scripts": {
+    "start": "node dist/app.js",
+    "build": "tsc",
+    "dev": "nodemon"
+  },
+  "author": "H-DNA",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "discord-interactions": "^4.3.0",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.2.1",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  }
+}
