@@ -8,7 +8,24 @@ DiscordClient.installGlobalCommand({
 });
 
 export const dailyQuestion: CommandHandler = async () => {
-  const link = await fetch('https://leetcode.com/graphql/', {
+  const link = await getDailyChallengeLink();
+
+  return {
+    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+    data: {
+      flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+      components: [
+        {
+          type: MessageComponentTypes.TEXT_DISPLAY,
+          content: `Daily challenge's link: ${link}`,
+        },
+      ],
+    },
+  };
+}
+
+async function getDailyChallengeLink() {
+  return fetch('https://leetcode.com/graphql/', {
     headers: {
       'Content-Type': 'application/json',
     },
@@ -22,17 +39,4 @@ export const dailyQuestion: CommandHandler = async () => {
     })
   }).then((res) => res.json())
     .then((res) => `https://leetcode.com${(res as any).data.activeDailyCodingChallengeQuestion.link}`);
-
-  return {
-    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-    data: {
-      flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-      components: [
-        {
-          type: MessageComponentTypes.TEXT_DISPLAY,
-          content: `Daily challenge's link: ${link}`,
-        }
-      ],
-    },
-  }
 }
