@@ -1,6 +1,11 @@
 import { commands } from '../lib/commands';
 import { DiscordClient } from '../lib/discord-client';
 
-for (const commandName in commands) {
-  DiscordClient.installGlobalCommand(commands[commandName]!);
+async function main() {
+  await DiscordClient.deleteAllGlobalCommands();
+  for (const commandName in commands) {
+    await DiscordClient.installGlobalCommand(commands[commandName]!);
+  }
 }
+
+main();
