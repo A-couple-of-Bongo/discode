@@ -1,13 +1,12 @@
 import { InteractionResponseFlags, InteractionResponseType, MessageComponentTypes } from 'discord-interactions';
 import { CommandHandler } from '..';
-import { DiscordClient } from '../../discord-client';
 
-DiscordClient.installGlobalCommand({
+export const pingCommand = {
   name: 'ping',
   description: 'Ping the server.',
-});
+};
 
-export const ping: CommandHandler = async () => {
+export const pingHandler: CommandHandler = async () => {
   return {
     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
     data: {

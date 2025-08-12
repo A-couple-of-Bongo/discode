@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import { InteractionResponseType, InteractionType, verifyKeyMiddleware } from 'discord-interactions';
-import { commands } from './commands';
+import { commandHandlers } from '../lib/commands';
 import morgan from 'morgan';
 
 const PORT = process.env.PORT || 3000;
@@ -18,11 +18,11 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY!), async fu
 
   if (type === InteractionType.APPLICATION_COMMAND) {
     const { name } = data;
-    if (!commands[name]) {
+    if (!commandHandlers[name]) {
       console.error(`Unknown command: ${name}`);
       return res.status(400).json({ error: 'Unknown command' });
     }
-    return res.send(await commands[name]!(data));
+    return res.send(await commandHandlers[name]!(data));
   }
 
   console.error(`Unknown interaction type: ${type}`);

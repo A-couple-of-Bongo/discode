@@ -1,13 +1,12 @@
 import { InteractionResponseFlags, InteractionResponseType, MessageComponentTypes } from 'discord-interactions';
 import { CommandHandler } from '..';
-import { DiscordClient } from '../../discord-client';
 
-DiscordClient.installGlobalCommand({
+export const dailyQuestionCommand = {
   name: 'daily-question',
   description: 'Get Leetcode\'s daily question.',
-});
+}
 
-export const dailyQuestion: CommandHandler = async () => {
+export const dailyQuestionHandler: CommandHandler = async () => {
   const link = await getDailyChallengeLink();
 
   return {

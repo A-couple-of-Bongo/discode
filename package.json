@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "A Leetcode integration with Discord",
   "scripts": {
-    "start": "node dist/app.js",
+    "start": "node dist/bin/app.js",
     "build": "tsc",
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "register": "node dist/bin/register.js"
   },
   "author": "H-DNA",
   "license": "Apache-2.0",

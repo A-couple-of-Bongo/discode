@@ -1,8 +1,6 @@
-import { InteractionResponseFlags, InteractionResponseType, MessageComponentTypes } from 'discord-interactions';
 import { CommandHandler } from '..';
-import { DiscordClient } from '../../discord-client';
 
-DiscordClient.installGlobalCommand({
+export const setLeetcodeForumCommand = {
   name: 'set-leetcode-forum',
   description: 'Set notified role whenever a daily challenge arrives.',
   options: [
@@ -13,8 +11,8 @@ DiscordClient.installGlobalCommand({
       required: true,
     },
   ],
-});
+};
 
-export const setLeetcodeForum: CommandHandler = async (data) => {
+export const setLeetcodeForumHandler: CommandHandler = async (data) => {
   return {};
 }
