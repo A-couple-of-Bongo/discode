@@ -16,9 +16,13 @@ export const userCommand = {
 };
 
 export const userHandler: CommandHandler = async ({ data }) => {
-  const userName = data?.options[0]?.value;
-  if (!userName) return;
-  const user = await LeetcodeClient.getUser(userName);
+  const username = data?.options[0]?.value;
+  if (!username) return;
+  return fetchUser(username);
+}
+
+export async function fetchUser(name: string) {
+  const user = await LeetcodeClient.getUser(name);
   if (!user) {
     return {
       type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -27,13 +31,12 @@ export const userHandler: CommandHandler = async ({ data }) => {
         components: [
           {
             type: MessageComponentTypes.TEXT_DISPLAY,
-            content: `User **${userName}** does not exist!`,
+            content: `User **${name}** does not exist!`,
           },
         ],
       }
     }
   }
-
   const problemStats = user.submitStatsGlobal?.acSubmissionNum || [];
   const easyStats = problemStats.find((stat: any) => stat.difficulty === 'Easy') || { count: 0, submissions: 0 };
   const mediumStats = problemStats.find((stat: any) => stat.difficulty === 'Medium') || { count: 0, submissions: 0 };

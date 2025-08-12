@@ -5,7 +5,6 @@ import { InteractionResponseType, InteractionType, verifyKeyMiddleware } from 'd
 import { commandHandlers } from '../lib/commands';
 import morgan from 'morgan';
 import { jobs } from '../lib/cronjobs';
-import { DiscordClient } from '../lib/discord-client';
 
 const PORT = process.env.PORT || 3000;
 const app = express();
