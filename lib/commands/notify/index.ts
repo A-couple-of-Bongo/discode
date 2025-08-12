@@ -8,15 +8,21 @@ export const notifyCommand = {
   options: [
     {
       name: 'channel',
-      description: 'The channel to send LeetCode notifications to',
+      description: 'The channel to send LeetCode notifications to.',
       type: 7, // CHANNEL
       required: true,
     },
     {
       name: 'role',
-      description: 'The role to ping',
+      description: 'The role to ping.',
       type: 8, // ROLE
       required: true,
+    },
+    {
+      name: 'text',
+      description: 'The text used for notification.',
+      type: 3, // STRING
+      required: false,
     },
   ],
 };
@@ -24,6 +30,7 @@ export const notifyCommand = {
 export const notifyHandler: CommandHandler = async (data) => {
   const channelId = (data as any)?.options[0]?.value;
   const roleId = (data as any)?.options[1]?.value;
+  const message = (data as any)?.options[2]?.value || 'Go go go!';
   const serverId = (data as any)?.resolved?.channels?.[channelId]?.guild_id;
   if (!channelId || !serverId) {
     return;
@@ -31,16 +38,16 @@ export const notifyHandler: CommandHandler = async (data) => {
   const db = getConnection();
   try {
     const insert = db.prepare(`
-    INSERT INTO servers(notified_channel_id, notified_role_id, server_id) VALUES(?, ?, ?);
+    INSERT INTO servers(notified_channel_id, notified_role_id, notification_text, server_id) VALUES(?, ?, ?, ?);
     `);
-    insert.run(channelId, roleId, serverId);
+    insert.run(channelId, roleId, message, serverId);
   } catch {
     const update = db.prepare(`
       UPDATE servers
-      SET notified_channel_id = ?, notified_role_id = ?
+      SET notified_channel_id = ?, notified_role_id = ?, notification_text = ?
       WHERE server_id = ?;
     `)
-    update.run(channelId, roleId, serverId);
+    update.run(channelId, roleId, message, serverId);
   }
 
   return {
@@ -50,7 +57,10 @@ export const notifyHandler: CommandHandler = async (data) => {
       components: [
         {
           type: MessageComponentTypes.TEXT_DISPLAY,
-          content: `Successfully set notified channel to <#${channelId}> and notified role to <@&${roleId}>.`,
+          content: `Successfully set:
+- The notified channel: <#${channelId}>
+- The notified role: <@&${roleId}>
+- The notification message is currently: "${message}"`,
         },
       ],
     },
