@@ -3,9 +3,7 @@ import { DiscordClient } from '../lib/discord-client';
 
 async function main() {
   await DiscordClient.deleteAllGlobalCommands();
-  for (const commandName in commands) {
-    await DiscordClient.installGlobalCommand(commands[commandName]!);
-  }
+  await DiscordClient.installGlobalCommands(Object.values(commands));
 }
 
 main();

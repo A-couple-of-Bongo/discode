@@ -19,6 +19,13 @@ export class DiscordClient {
     return DiscordClient.fetch(`applications/${DiscordClient.appId}/commands`, { method: 'POST', body: JSON.stringify(command), });
   }
 
+  static async installGlobalCommands(commands: object[]) {
+    return DiscordClient.fetch(`applications/${DiscordClient.appId}/commands`, {
+      method: 'PUT',
+      body: JSON.stringify(commands),
+    });
+  }
+
   static async deleteAllGlobalCommands() {
     return DiscordClient.fetch(`applications/${DiscordClient.appId}/commands`, { method: 'PUT', body: JSON.stringify({}) });
   }
