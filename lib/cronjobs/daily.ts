@@ -16,7 +16,7 @@ export const dailyCronJob: CronJob = {
       const message = contact['notification_text'] as string || 'Go go go!';
       if (channelId && roleId) {
         DiscordClient.createForumThread(channelId, {
-          name: dailyQuestion.title,
+          name: `${dailyQuestion.date}. ${dailyQuestion.title}`,
           message: {
             content: `<@&${roleId}> ${message}: ${dailyQuestion.link}`,
           }
