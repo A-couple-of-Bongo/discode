@@ -6,7 +6,10 @@
     "start": "node dist/bin/app.js",
     "build": "tsc",
     "dev": "nodemon",
-    "register": "node dist/bin/register.js"
+    "register": "node dist/bin/register.js",
+    "migration:up": "DBMATE_MIGRATIONS_DIR=./migrations dbmate up",
+    "migration:down": "DBMATE_MIGRATIONS_DIR=./migrations dbmate down",
+    "migration:new": "DBMATE_MIGRATIONS_DIR=./migrations dbmate new"
   },
   "author": "H-DNA",
   "license": "Apache-2.0",
@@ -21,6 +24,7 @@
     "@types/express": "^5.0.3",
     "@types/morgan": "^1.9.10",
     "@types/node": "^24.2.1",
+    "dbmate": "^2.28.0",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
