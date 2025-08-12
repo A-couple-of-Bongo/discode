@@ -22,4 +22,11 @@ export class DiscordClient {
   static async deleteAllGlobalCommands() {
     return DiscordClient.fetch(`applications/${DiscordClient.appId}/commands`, { method: 'PUT', body: JSON.stringify({}) });
   }
+
+  static async createForumThread(forumChannelId: string, post: object) {
+    return DiscordClient.fetch(`channels/${forumChannelId}/threads`, {
+      method: 'POST',
+      body: JSON.stringify(post),
+    });
+  }
 }

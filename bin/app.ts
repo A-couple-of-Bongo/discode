@@ -5,6 +5,7 @@ import { InteractionResponseType, InteractionType, verifyKeyMiddleware } from 'd
 import { commandHandlers } from '../lib/commands';
 import morgan from 'morgan';
 import { jobs } from '../lib/cronjobs';
+import { DiscordClient } from '../lib/discord-client';
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -38,7 +39,7 @@ app.listen(PORT, () => {
 
   console.log('* Cron jobs starting up')
   for (const job of jobs) {
-    console.log('** Starting cron job ', job.name);
+    console.log('** Starting cron job', job.name);
     nodeCron.schedule(job.schedule, job.callback);
   }
 })

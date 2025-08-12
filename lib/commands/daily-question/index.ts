@@ -8,7 +8,7 @@ export const dailyQuestionCommand = {
 }
 
 export const dailyQuestionHandler: CommandHandler = async () => {
-  const { link, question: { content } } = await getDailyChallengeLink();
+  const { link, question: { content } } = await getDailyChallengeInfo();
   await takeScreenshotHtml(content);
 
   return {
@@ -31,7 +31,7 @@ export const dailyQuestionHandler: CommandHandler = async () => {
   };
 }
 
-async function getDailyChallengeLink() {
+async function getDailyChallengeInfo() {
   return fetch('https://leetcode.com/graphql/', {
     headers: {
       'Content-Type': 'application/json',
