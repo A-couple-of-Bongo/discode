@@ -50,7 +50,7 @@ export const notifyHandler: CommandHandler = async (data) => {
       components: [
         {
           type: MessageComponentTypes.TEXT_DISPLAY,
-          content: `Successfully set notified channel to <#${channelId}> and notified role to <@${roleId}>.`,
+          content: `Successfully set notified channel to <#${channelId}> and notified role to <@&${roleId}>.`,
         },
       ],
     },
