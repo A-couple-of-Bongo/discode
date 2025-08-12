@@ -19,10 +19,10 @@ export const dailyCronJob: CronJob = {
       const difficultyTagId = tags.find((tag) => tag.name == dailyQuestionData.question.difficulty.toLowerCase()).id;
       const problemTypeTagIds = dailyQuestionData.question.topicTags.slice(0, 3)
         .map(({ name }: { name: string }) => name)
-        .map(
+        .flatMap(
           (type: string) => tags.find(
             (tag) => tag.name == type.toLowerCase()
-          ).id);
+          ).id || []);
       if (channelId && roleId) {
         await DiscordClient.createForumThread(channelId, {
           name: `${dailyQuestionData.date}. ${dailyQuestionData.question.title}`,
