@@ -1,7 +1,50 @@
+interface DailyQuestion {
+  date: string;
+  link: string;
+  question: {
+    content: string;
+    title: string;
+    difficulty: string;
+    topicTags: { name: string }[];
+  };
+}
+
+export interface User {
+  username: string;
+  profile: {
+    ranking: number;
+    userAvatar: string;
+    realName: string;
+  };
+  problemsSolvedBeatsStats: {
+    difficulty: string;
+    percentage: number;
+  }[];
+  submitStatsGlobal: {
+    acSubmissionNum: Array<{
+      difficulty: string;
+      count: number;
+      submissions: number;
+    }>;
+  };
+  userContestRanking: {
+    attendedContestsCount: number;
+    rating: number;
+    globalRanking: number;
+    totalParticipants: number;
+    topPercentage: number;
+  };
+}
+
+interface Tag {
+  name: string;
+  emoji_name?: string;
+}
+
 export class LeetcodeClient {
   static leetcodeApiUrl = 'https://leetcode.com/graphql/';
 
-  static async getDailyQuestion(): Promise<object> {
+  static async getDailyQuestion(): Promise<DailyQuestion> {
     const res = await fetch(LeetcodeClient.leetcodeApiUrl, {
       headers: {
         'Content-Type': 'application/json',
@@ -34,7 +77,7 @@ export class LeetcodeClient {
     };
   }
 
-  static getTags() {
+  static getTags(): Tag[] {
     return [
       { name: 'easy', emoji_name: '🟢' },
       { name: 'medium', emoji_name: '🟡' },
@@ -46,5 +89,52 @@ export class LeetcodeClient {
       { name: 'backtracking' },
       { name: 'prefix-sum' },
     ];
+  }
+
+  static async getUser(name: string): Promise<User | undefined> {
+    const res = await fetch(LeetcodeClient.leetcodeApiUrl, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        query: `
+          query userPublicProfile($username: String!) {
+            matchedUser(username: $username) {
+              username
+              profile {
+                ranking
+                userAvatar
+                realName
+              }
+              problemsSolvedBeatsStats {
+                difficulty
+                percentage
+              }
+              submitStatsGlobal {
+                acSubmissionNum {
+                  difficulty
+                  count
+                  submissions
+                }
+              }
+            }
+            userContestRanking(username: $username) {
+              attendedContestsCount
+              rating
+              globalRanking
+              totalParticipants
+              topPercentage
+            }
+          }    
+        `,
+        variables: {
+          username: name,
+        },
+      })
+    });
+
+    const json = await res.json();
+    return (json as any)?.data?.matchedUser;
   }
 }
