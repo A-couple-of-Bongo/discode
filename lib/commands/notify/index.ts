@@ -29,11 +29,11 @@ export const notifyCommand = {
   ],
 };
 
-export const notifyHandler: CommandHandler = async (data) => {
-  const channelId = (data as any)?.options[0]?.value;
-  const roleId = (data as any)?.options[1]?.value;
-  const message = (data as any)?.options[2]?.value || 'Go go go!';
-  const serverId = (data as any)?.resolved?.channels?.[channelId]?.guild_id;
+export const notifyHandler: CommandHandler = async ({ data }) => {
+  const channelId = data?.options[0]?.value;
+  const roleId = data?.options[1]?.value;
+  const message = data?.options[2]?.value || 'Go go go!';
+  const serverId = data?.resolved?.channels?.[channelId]?.guild_id;
   if (!channelId || !serverId) {
     return;
   }

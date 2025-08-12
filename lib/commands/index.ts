@@ -1,10 +1,11 @@
+import { bindUserCommand, bindUserHandler } from './bind-user';
 import { dailyQuestionCommand, dailyQuestionHandler } from './daily-question';
 import { helpCommand, helpHandler } from './help';
 import { notifyCommand, notifyHandler } from './notify';
 import { pingCommand, pingHandler } from './ping';
 import { userCommand, userHandler } from './user';
 
-export type CommandHandler = (data: object) => Promise<object | undefined>;
+export type CommandHandler = (payload: any) => Promise<object | undefined>;
 
 export const commandHandlers: Record<string, CommandHandler> = {
   'ping': pingHandler,
@@ -12,6 +13,7 @@ export const commandHandlers: Record<string, CommandHandler> = {
   'notify': notifyHandler,
   'help': helpHandler,
   'user': userHandler,
+  'bind-user': bindUserHandler,
 };
 
 export const commands: Record<string, object> = {
@@ -20,4 +22,5 @@ export const commands: Record<string, object> = {
   'notify': notifyCommand,
   'help': helpCommand,
   'user': userCommand,
+  'bind-user': bindUserCommand,
 }

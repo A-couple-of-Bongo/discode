@@ -26,7 +26,7 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY!), async fu
       console.error(`Unknown command: ${name}`);
       return res.status(400).json({ error: 'Unknown command' });
     }
-    return res.send(await commandHandlers[name]!(data));
+    return res.send(await commandHandlers[name]!(req.body));
   }
 
   console.error(`Unknown interaction type: ${type}`);

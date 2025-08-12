@@ -15,8 +15,8 @@ export const userCommand = {
   ],
 };
 
-export const userHandler: CommandHandler = async (data) => {
-  const userName = (data as any)?.options[0]?.value;
+export const userHandler: CommandHandler = async ({ data }) => {
+  const userName = data?.options[0]?.value;
   if (!userName) return;
   const user = await LeetcodeClient.getUser(userName);
   if (!user) {

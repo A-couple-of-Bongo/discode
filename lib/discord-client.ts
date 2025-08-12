@@ -70,4 +70,12 @@ export class DiscordClient {
       }),
     });
   }
+
+  static async getMessage(channelId: string, messageId: string) {
+    const message = await DiscordClient.fetch(`channels/${channelId}/messages/${messageId}`, {
+      method: 'GET',
+    });
+
+    return message;
+  }
 }
