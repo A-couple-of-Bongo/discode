@@ -13,8 +13,12 @@ export const helpHandler: CommandHandler = async () => {
       flags: InteractionResponseFlags.IS_COMPONENTS_V2,
       components: [
         {
-          type: MessageComponentTypes.TEXT_DISPLAY,
-          content: `**Discode bot**
+          type: MessageComponentTypes.CONTAINER,
+          accent_color: 703487,
+          components: [
+            {
+              type: MessageComponentTypes.TEXT_DISPLAY,
+              content: `# Discode bot
 If this is the first time you add the bot to the server you may want to run \`/notify\` to setup the notification.
 For first time users, use \`bind-user\` to bind your account to a Leetcode account.
 ------------------------
@@ -28,8 +32,10 @@ For first time users, use \`bind-user\` to bind your account to a Leetcode accou
 - \`user\`: Get the user's Leetcode profile.
 ------------------------
 `,
+            },
+          ],
         },
       ],
-    },
-  }
+    }
+  };
 }
