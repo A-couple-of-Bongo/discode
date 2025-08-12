@@ -1,6 +1,7 @@
 import { InteractionResponseFlags, InteractionResponseType, MessageComponentTypes } from 'discord-interactions';
 import { CommandHandler } from '..';
 import { getConnection } from '../../db';
+import { DiscordClient } from '../../discord-client';
 
 export const notifyCommand = {
   name: 'notify',

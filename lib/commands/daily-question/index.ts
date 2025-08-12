@@ -1,6 +1,7 @@
 import puppeteer from 'puppeteer';
 import { InteractionResponseFlags, InteractionResponseType, MessageComponentTypes } from 'discord-interactions';
 import { CommandHandler } from '..';
+import { LeetcodeClient } from '../../leetcode-client';
 
 export const dailyQuestionCommand = {
   name: 'daily-question',
@@ -8,7 +9,7 @@ export const dailyQuestionCommand = {
 }
 
 export const dailyQuestionHandler: CommandHandler = async () => {
-  const { link, question: { content } } = await getDailyChallengeInfo();
+  const { link, question: { content } } = await LeetcodeClient.getDailyQuestion() as any;
   await takeScreenshotHtml(content);
 
   return {
@@ -28,35 +29,6 @@ export const dailyQuestionHandler: CommandHandler = async () => {
         },
       ],
     },
-  };
-}
-
-async function getDailyChallengeInfo() {
-  const res = await fetch('https://leetcode.com/graphql/', {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    method: 'POST',
-    body: JSON.stringify({
-      query: `
-        query questionOfTodayV2 {
-          activeDailyCodingChallengeQuestion {
-            date
-            link
-            question {
-              content
-              title
-            }
-          }
-        }
-      `,
-    })
-  });
-  const json = await res.json();
-  const data = (json as any).data.activeDailyCodingChallengeQuestion;
-  return {
-    ...data,
-    link: `https://leetcode.com${data.link}`,
   };
 }
 
