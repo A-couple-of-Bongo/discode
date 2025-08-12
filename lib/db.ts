@@ -5,7 +5,7 @@ let connection: DatabaseSync | undefined = undefined;
 
 export function getConnection(): DatabaseSync {
   if (!connection) {
-    connection = new DatabaseSync(process.env.DATABASE_FILEPATH || "./discode.db");
+    connection = new DatabaseSync(process.env.DATABASE_FILEPATH!);
   }
   return connection;
 }
