@@ -15,16 +15,23 @@ export const dailyCronJob: CronJob = {
       const channelId = contact['notified_channel_id'] as string;
       const roleId = contact['notified_role_id'] as string;
       const message = contact['notification_text'] as string || 'Go go go!';
+      const tags = await DiscordClient.getForumTags(channelId) as any[];
+      const difficultyTagId = tags.find((tag) => tag.name == dailyQuestionData.question.difficulty.toLowerCase()).id;
+      const problemTypeTagIds = dailyQuestionData.question.topicTags.slice(0, 3)
+        .map(({ name }: { name: string }) => name)
+        .map(
+          (type: string) => tags.find(
+            (tag) => tag.name == type.toLowerCase()
+          ).id);
       if (channelId && roleId) {
-        DiscordClient.createForumThread(channelId, {
+        await DiscordClient.createForumThread(channelId, {
           name: `${dailyQuestionData.date}. ${dailyQuestionData.question.title}`,
           message: {
             content: `<@&${roleId}> ${message}: ${dailyQuestionData.link}`,
           },
           applied_tags: [
-            dailyQuestionData.question.difficulty,
-            ...dailyQuestionData.question.topicTags
-              .map(({ name }: { name: string }) => name).slice(0, 3),
+            difficultyTagId,
+            ...problemTypeTagIds,
           ],
         });
       }

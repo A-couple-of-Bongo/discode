@@ -2,6 +2,7 @@ import { InteractionResponseFlags, InteractionResponseType, MessageComponentType
 import { CommandHandler } from '..';
 import { getConnection } from '../../db';
 import { DiscordClient } from '../../discord-client';
+import { LeetcodeClient } from '../../leetcode-client';
 
 export const notifyCommand = {
   name: 'notify',
@@ -50,6 +51,9 @@ export const notifyHandler: CommandHandler = async (data) => {
     `)
     update.run(channelId, roleId, message, serverId);
   }
+
+  await DiscordClient.deleteAllForumTags(channelId);
+  await DiscordClient.createForumTags(channelId, LeetcodeClient.getTags());
 
   return {
     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,

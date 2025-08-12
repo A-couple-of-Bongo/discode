@@ -29,4 +29,38 @@ export class DiscordClient {
       body: JSON.stringify(post),
     });
   }
+
+  static async getForumTags(forumChannelId: string) {
+    const response = await DiscordClient.fetch(`channels/${forumChannelId}`, {
+      method: 'GET',
+    });
+    const channel = await response.json() as any;
+    return channel.available_tags || [];
+  }
+
+  static async createForumTags(forumChannelId: string, tags: { name: string, emoji_name?: string }[]) {
+    const response = await DiscordClient.fetch(`channels/${forumChannelId}`, {
+      method: 'GET',
+    });
+    const channel = await response.json() as any;
+
+    const existingTags = channel.available_tags || [];
+    const updatedTags = [...existingTags, ...tags];
+
+    return DiscordClient.fetch(`channels/${forumChannelId}`, {
+      method: 'PATCH',
+      body: JSON.stringify({
+        available_tags: updatedTags
+      }),
+    });
+  }
+
+  static async deleteAllForumTags(forumChannelId: string) {
+    return DiscordClient.fetch(`channels/${forumChannelId}`, {
+      method: 'PATCH',
+      body: JSON.stringify({
+        available_tags: []
+      }),
+    });
+  }
 }
