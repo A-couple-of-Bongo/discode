@@ -20,9 +20,17 @@ export const helpHandler: CommandHandler = async () => {
               type: MessageComponentTypes.TEXT_DISPLAY,
               content: `# Discode bot
 If this is the first time you add the bot to the server you may want to run \`notify\` to setup the notification.
-For first time users, use \`bind-user\` to bind your account to a Leetcode account.
-------------------------
-**Command**
+For first time users, use \`bind-user\` to bind your account to a Leetcode account.`
+            },
+            {
+              type: MessageComponentTypes.SEPARATOR,
+              divider: true,
+              spacing: 1,
+            },
+            {
+              type: MessageComponentTypes.TEXT_DISPLAY,
+              content: `
+## Command
 - \`about-me\`: Get your Leetcode profile.
 - \`bind-user\`: Bind your account to a Leetcode user.
 - \`daily-question\`: Fetch the daily question from Leetcode.
@@ -30,7 +38,6 @@ For first time users, use \`bind-user\` to bind your account to a Leetcode accou
 - \`notify\`: Setup the notification forum, role and message.
 - \`ping\`: Ping the server.
 - \`user\`: Get the user's Leetcode profile.
-------------------------
 `,
             },
           ],
