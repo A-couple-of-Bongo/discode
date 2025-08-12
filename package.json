@@ -7,6 +7,12 @@
     "build": "tsc",
     "dev": "nodemon",
     "register": "node dist/bin/register.js",
+    "lint": "npx biome lint",
+    "lint:fix": "npx biome lint --write",
+    "format": "npx biome format",
+    "format:fix": "npx biome format --write",
+    "check": "npx biome check",
+    "check:fix": "npx biome check --write",
     "migration:up": "DBMATE_MIGRATIONS_DIR=./migrations dbmate up",
     "migration:down": "DBMATE_MIGRATIONS_DIR=./migrations dbmate down",
     "migration:new": "DBMATE_MIGRATIONS_DIR=./migrations dbmate new"
@@ -22,6 +28,7 @@
     "puppeteer": "^24.16.1"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.1.4",
     "@types/express": "^5.0.3",
     "@types/morgan": "^1.9.10",
     "@types/node": "^24.2.1",
