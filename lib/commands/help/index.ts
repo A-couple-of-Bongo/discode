@@ -19,6 +19,7 @@ If this is the first time you add the bot to the server you may want to run \`/n
 ------------------------
 **Command**
 - \`daily-question\`: Fetch the daily question from Leetcode.
+- \`help\`: Get bot usage guidelines.
 - \`notify\`: Setup the notification forum, role and message.
 - \`ping\`: Ping the server.
 ------------------------
