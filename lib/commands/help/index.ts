@@ -19,7 +19,7 @@ export const helpHandler: CommandHandler = async () => {
             {
               type: MessageComponentTypes.TEXT_DISPLAY,
               content: `# Discode bot
-If this is the first time you add the bot to the server you may want to run \`/notify\` to setup the notification.
+If this is the first time you add the bot to the server you may want to run \`notify\` to setup the notification.
 For first time users, use \`bind-user\` to bind your account to a Leetcode account.
 ------------------------
 **Command**
