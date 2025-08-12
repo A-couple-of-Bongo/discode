@@ -8,7 +8,7 @@ export const dailyCronJob: CronJob = {
   callback: async () => {
     const db = getConnection();
     const contacts = db.prepare('SELECT notified_channel_id, notified_role_id, notification_text FROM servers;').all();
-    const dailyQuestion = await getDailyChallengeInfo();
+    const dailyQuestionData = await getDailyChallengeInfo();
 
     for (const contact of contacts) {
       const channelId = contact['notified_channel_id'] as string;
@@ -16,9 +16,9 @@ export const dailyCronJob: CronJob = {
       const message = contact['notification_text'] as string || 'Go go go!';
       if (channelId && roleId) {
         DiscordClient.createForumThread(channelId, {
-          name: `${dailyQuestion.date}. ${dailyQuestion.title}`,
+          name: `${dailyQuestionData.date}. ${dailyQuestionData.question.title}`,
           message: {
-            content: `<@&${roleId}> ${message}: ${dailyQuestion.link}`,
+            content: `<@&${roleId}> ${message}: ${dailyQuestionData.link}`,
           }
         });
       }
@@ -26,8 +26,8 @@ export const dailyCronJob: CronJob = {
   },
 };
 
-async function getDailyChallengeInfo(): Promise<{ date: string, title: string, link: string, content: string }> {
-  return fetch('https://leetcode.com/graphql/', {
+async function getDailyChallengeInfo() {
+  const res = await fetch('https://leetcode.com/graphql/', {
     headers: {
       'Content-Type': 'application/json',
     },
@@ -46,15 +46,11 @@ async function getDailyChallengeInfo(): Promise<{ date: string, title: string, l
         }
       `,
     })
-  })
-    .then((res) => res.json())
-    .then((res) => {
-      const data = (res as any).data.activeDailyCodingChallengeQuestion;
-      return {
-        date: data.date,
-        title: data.question.title,
-        link: `https://leetcode.com${data.link}`,
-        content: data.question.content,
-      };
-    });
+  });
+  const json = await res.json();
+  const data = (json as any).data.activeDailyCodingChallengeQuestion;
+  return {
+    ...data,
+    link: `https://leetcode.com${data.link}`,
+  };
 }

@@ -32,7 +32,7 @@ export const dailyQuestionHandler: CommandHandler = async () => {
 }
 
 async function getDailyChallengeInfo() {
-  return fetch('https://leetcode.com/graphql/', {
+  const res = await fetch('https://leetcode.com/graphql/', {
     headers: {
       'Content-Type': 'application/json',
     },
@@ -41,23 +41,23 @@ async function getDailyChallengeInfo() {
       query: `
         query questionOfTodayV2 {
           activeDailyCodingChallengeQuestion {
+            date
             link
             question {
               content
+              title
             }
           }
         }
       `,
     })
-  })
-    .then((res) => res.json())
-    .then((res) => {
-      const data = (res as any).data.activeDailyCodingChallengeQuestion;
-      return {
-        ...data,
-        link: `https://leetcode.com${data.link}`
-      };
-    });
+  });
+  const json = await res.json();
+  const data = (json as any).data.activeDailyCodingChallengeQuestion;
+  return {
+    ...data,
+    link: `https://leetcode.com${data.link}`,
+  };
 }
 
 const takeScreenshotHtml = async (htmlContent: string) => {
