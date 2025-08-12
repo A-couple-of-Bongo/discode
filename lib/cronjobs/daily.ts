@@ -7,17 +7,18 @@ export const dailyCronJob: CronJob = {
   schedule: '0 5 7 * * *',
   callback: async () => {
     const db = getConnection();
-    const contacts = db.prepare('SELECT notified_channel_id, notified_role_id FROM servers;').all();
+    const contacts = db.prepare('SELECT notified_channel_id, notified_role_id, notification_text FROM servers;').all();
     const dailyQuestion = await getDailyChallengeInfo();
 
     for (const contact of contacts) {
       const channelId = contact['notified_channel_id'] as string;
       const roleId = contact['notified_role_id'] as string;
+      const message = contact['notification_text'] as string || 'Go go go!';
       if (channelId && roleId) {
         DiscordClient.createForumThread(channelId, {
           name: dailyQuestion.title,
           message: {
-            content: `Go go go <@&${roleId}>: ${dailyQuestion.link}`,
+            content: `<@&${roleId}> ${message}: ${dailyQuestion.link}`,
           }
         });
       }
