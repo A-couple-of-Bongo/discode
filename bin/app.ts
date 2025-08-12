@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 
 app.use(morgan('tiny'));
+app.use(express.static('public'))
 
 app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY!), async function(req, res) {
   const { id, type, data } = req.body;

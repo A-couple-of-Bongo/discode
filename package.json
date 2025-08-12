@@ -14,7 +14,8 @@
     "discord-interactions": "^4.3.0",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
-    "morgan": "^1.10.1"
+    "morgan": "^1.10.1",
+    "puppeteer": "^24.16.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.3",

@@ -1,6 +1,7 @@
 {
   "watch": [
-    "src"
+    "lib",
+    "bin"
   ],
   "ext": "ts,json",
   "ignore": [
