@@ -1,8 +1,10 @@
 import 'dotenv/config';
 import express from 'express';
+import nodeCron from 'node-cron';
 import { InteractionResponseType, InteractionType, verifyKeyMiddleware } from 'discord-interactions';
 import { commandHandlers } from '../lib/commands';
 import morgan from 'morgan';
+import { jobs } from '../lib/cronjobs';
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -31,5 +33,12 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY!), async fu
 });
 
 app.listen(PORT, () => {
-  console.log('Listening on port', PORT)
+  console.log('Express app starts')
+  console.log('* Listening on port', PORT)
+
+  console.log('* Cron jobs starting up')
+  for (const job of jobs) {
+    console.log('** Starting cron job ', job.name);
+    nodeCron.schedule(job.schedule, job.callback);
+  }
 })
