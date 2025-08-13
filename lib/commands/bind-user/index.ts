@@ -1,6 +1,7 @@
 import { InteractionResponseFlags, InteractionResponseType, MessageComponentTypes } from 'discord-interactions';
 import { CommandHandler } from '..';
 import { getConnection } from '../../db';
+import { LeetcodeClient } from '../../leetcode-client';
 
 export const bindUserCommand = {
   name: 'bind-user',
@@ -19,6 +20,18 @@ export const bindUserHandler: CommandHandler = async (payload) => {
   const userId = payload?.member?.user?.id;
   const leetcodeUserName = payload?.data?.options?.[0]?.value;
   if (!userId || !leetcodeUserName) return;
+  if (!await LeetcodeClient.userExists(leetcodeUserName)) return {
+    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+    data: {
+      flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+      components: [
+        {
+          type: MessageComponentTypes.TEXT_DISPLAY,
+          content: `The Leetcode account \`${leetcodeUserName}\` does not exist!`,
+        },
+      ],
+    },
+  }
 
   const db = getConnection();
   try {

@@ -22,7 +22,7 @@ export const dailyCronJob: CronJob = {
         .flatMap(
           (type: string) => tags.find(
             (tag) => tag.name == type.toLowerCase()
-          ).id || []);
+          )?.id || []);
       if (channelId && roleId) {
         await DiscordClient.createForumThread(channelId, {
           name: `${dailyQuestionData.date}. ${dailyQuestionData.question.title}`,

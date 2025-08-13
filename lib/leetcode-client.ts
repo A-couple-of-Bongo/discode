@@ -137,4 +137,28 @@ export class LeetcodeClient {
     const json = await res.json();
     return (json as any)?.data?.matchedUser;
   }
+
+  static async userExists(username: string): Promise<boolean> {
+    const res = await fetch(LeetcodeClient.leetcodeApiUrl, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        query: `
+            query checkUser($username: String!) {
+              matchedUser(username: $username) {
+                username
+              }
+            }
+          `,
+        variables: {
+          username: username,
+        },
+      })
+    });
+
+    const json = await res.json();
+    return !!(json as any).data?.matchedUser;
+  }
 }
