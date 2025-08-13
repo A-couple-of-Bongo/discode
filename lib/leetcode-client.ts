@@ -1,4 +1,4 @@
-interface DailyQuestion {
+export interface DailyQuestion {
   date: string;
   link: string;
   question: {
@@ -6,6 +6,7 @@ interface DailyQuestion {
     title: string;
     difficulty: string;
     topicTags: { name: string }[];
+    titleSlug: string;
   };
 }
 
@@ -41,6 +42,18 @@ interface Tag {
   emoji_name?: string;
 }
 
+export interface UserSubmission {
+  id: string;
+  titleSlug: string;
+  lang: string;
+  timestamp: string;
+  memory: string;
+  memoryPercentile: number;
+  runtime: string;
+  runtimePercentile: number;
+  url: string;
+}
+
 export class LeetcodeClient {
   static leetcodeApiUrl = 'https://leetcode.com/graphql/';
 
@@ -60,6 +73,7 @@ export class LeetcodeClient {
               content
               title
               difficulty
+              titleSlug
               topicTags {
                 name
               }
@@ -160,5 +174,46 @@ export class LeetcodeClient {
 
     const json = await res.json();
     return !!(json as any).data?.matchedUser;
+  }
+
+  static async getUserSolutionForDaily(username: string): Promise<UserSubmission | undefined> {
+    const dailyQuestion = await LeetcodeClient.getDailyQuestion();
+    const titleSlug = dailyQuestion.question.titleSlug;
+
+    return await LeetcodeClient.getUserLatestAcceptedSubmission(username, titleSlug);
+  }
+
+  static async getUserLatestAcceptedSubmission(username: string, titleSlug: string): Promise<UserSubmission | undefined> {
+    const res = await fetch(LeetcodeClient.leetcodeApiUrl, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        query: `
+            query recentAcSubmissions($username: String!, $limit: Int!) {
+              recentAcSubmissionList(username: $username, limit: $limit) {
+                id
+                titleSlug
+                memory
+                runtime
+                lang
+                timestamp
+                url
+              }
+            }    
+          `,
+        variables: {
+          username,
+          limit: 10,
+        },
+      })
+    });
+    const json = await res.json();
+    const submissions = (json as any)?.data?.recentAcSubmissionList
+      ?.filter((submission: any) => submission.titleSlug === titleSlug)
+      ?.map((submission: any) => ({ ...submission, url: `https://leetcode.com${submission.url}` }));
+
+    return submissions?.[0];
   }
 }
