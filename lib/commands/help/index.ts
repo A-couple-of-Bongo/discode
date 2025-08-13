@@ -32,7 +32,8 @@ For first time users, use \`bind-user\` to bind your account to a Leetcode accou
               content: `
 ## Command
 - \`about-me\`: Get your Leetcode profile.
-- \`bind-user\`: Bind your account to a Leetcode user.
+- \`about-you\`: Get the Leetcode profile of a member.
+- \`bind-user\`: Bind your Discord account to a Leetcode profile.
 - \`daily-question get\`: Fetch the daily question from Leetcode.
 - \`daily-question my-solution\`: Showcase your solution to the daily question.
 - \`daily-question your-solution\`: View the solution to the daily question of a member.

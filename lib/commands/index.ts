@@ -1,4 +1,5 @@
 import { aboutMeCommand, aboutMeHandler } from './about-me';
+import { aboutYouCommand, aboutYouHandler } from './about-you';
 import { bindUserCommand, bindUserHandler } from './bind-user';
 import { dailyQuestionCommand, dailyQuestionHandler } from './daily-question';
 import { helpCommand, helpHandler } from './help';
@@ -16,6 +17,7 @@ export const commandHandlers: Record<string, CommandHandler> = {
   'user': userHandler,
   'bind-user': bindUserHandler,
   'about-me': aboutMeHandler,
+  'about-you': aboutYouHandler,
 };
 
 export const commands: Record<string, object> = {
@@ -26,4 +28,5 @@ export const commands: Record<string, object> = {
   'user': userCommand,
   'bind-user': bindUserCommand,
   'about-me': aboutMeCommand,
+  'about-you': aboutYouCommand,
 }
