@@ -24,6 +24,7 @@
 
           nativeBuildInputs = with pkgs; [
             nodejs_22
+            git
           ];
 
           shellHook = ''
