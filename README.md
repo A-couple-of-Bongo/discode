@@ -15,7 +15,7 @@ If this is the first time you're adding the bot to your server, you'll want to r
 
 #### **Profile Commands**
 - `/about-me` - Get your own LeetCode profile with detailed statistics
-- `/about-you` - Get a member's LeetCode profile with detailed statistics
+- `/about-you <user_id>` - Get a member's LeetCode profile with detailed statistics
 - `/user <leetcode_username>` - View any LeetCode user's profile and statistics
 - `/bind-user <leetcode_username>` - Link your Discord account to a LeetCode profile
 
