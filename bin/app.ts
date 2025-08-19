@@ -6,9 +6,9 @@ import { InteractionResponseType, InteractionType, verifyKeyMiddleware } from 'd
 import { commandHandlers } from '../lib/commands';
 import morgan from 'morgan';
 import { jobs } from '../lib/cronjobs';
+import { logger } from '../lib/logger';
 
 const PORT = process.env.PORT || 3000;
-const LOGFILE_PATH = process.env.LOGFILE_PATH;
 const app = express();
 
 app.use(express.static('public'))
@@ -28,7 +28,7 @@ app.post('/interactions',
 
       return `[${timestamp}] Id: ${id} - ${logType} - ${tokens.method?.(req, res)} ${tokens.url?.(req, res)} ${tokens.status?.(req, res)} ${tokens['response-time']?.(req, res)}ms - UA: "${userAgent}"`;
     },
-    { stream: fs.createWriteStream(LOGFILE_PATH || 'access.log', { flags: 'a' }) },
+    { stream: fs.createWriteStream(process.env.ACCESS_LOG_PATH || 'access.log', { flags: 'a' }) },
   ),
   verifyKeyMiddleware(process.env.PUBLIC_KEY!),
   async function(req, res) {
@@ -50,6 +50,10 @@ app.post('/interactions',
     console.error(`Unknown interaction type: ${type}`);
     return res.status(400).json({ error: 'Unknown interaction' });
   });
+
+app.use((err: any, req: any, res: any, next: any) => {
+  logger.error(err);
+})
 
 app.listen(PORT, () => {
   console.log('Express app starts')
