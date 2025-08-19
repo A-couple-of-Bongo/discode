@@ -1,6 +1,6 @@
 import puppeteer from 'puppeteer';
 import _ from 'lodash';
-import { ButtonStyleTypes, InteractionResponseFlags, InteractionResponseType, MessageComponentTypes } from 'discord-interactions';
+import { InteractionResponseFlags, InteractionResponseType, MessageComponentTypes } from 'discord-interactions';
 import { CommandHandler } from '..';
 import { LeetcodeClient, UserSubmission } from '../../leetcode-client';
 import { getConnection } from '../../db';
