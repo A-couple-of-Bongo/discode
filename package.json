@@ -6,7 +6,7 @@
     "start": "node dist/bin/app.js",
     "build": "tsc",
     "dev": "nodemon",
-    "register": "node dist/bin/register.js",
+    "register": "npx ts-node bin/register.ts",
     "lint": "npx biome lint",
     "lint:fix": "npx biome lint --write",
     "format": "npx biome format",
