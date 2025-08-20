@@ -1,5 +1,5 @@
 services:
-  discode:
+  bot:
     build:
       context: .
       dockerfile: Dockerfile
