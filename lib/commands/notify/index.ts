@@ -1,4 +1,4 @@
-import { InteractionResponseFlags, InteractionResponseType, MessageComponentTypes } from 'discord-interactions';
+import { InteractionResponseFlags, MessageComponentTypes } from 'discord-interactions';
 import { CommandHandler } from '..';
 import { getConnection } from '../../db';
 import { DiscordClient } from '../../discord-client';
@@ -56,18 +56,15 @@ export const notifyHandler: CommandHandler = async ({ data }) => {
   await DiscordClient.createForumTags(channelId, LeetcodeClient.getTags());
 
   return {
-    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-    data: {
-      flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-      components: [
-        {
-          type: MessageComponentTypes.TEXT_DISPLAY,
-          content: `Successfully set:
+    flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+    components: [
+      {
+        type: MessageComponentTypes.TEXT_DISPLAY,
+        content: `Successfully set:
 - The notified channel: <#${channelId}>
 - The notified role: <@&${roleId}>
 - The notification message is currently: "${message}"`,
-        },
-      ],
-    },
+      },
+    ],
   };
 }

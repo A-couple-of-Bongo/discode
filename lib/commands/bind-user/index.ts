@@ -1,4 +1,4 @@
-import { InteractionResponseFlags, InteractionResponseType, MessageComponentTypes } from 'discord-interactions';
+import { InteractionResponseFlags, MessageComponentTypes } from 'discord-interactions';
 import { CommandHandler } from '..';
 import { getConnection } from '../../db';
 import { LeetcodeClient } from '../../leetcode-client';
@@ -21,16 +21,13 @@ export const bindUserHandler: CommandHandler = async (payload) => {
   const leetcodeUserName = payload?.data?.options?.[0]?.value;
   if (!userId || !leetcodeUserName) return;
   if (!await LeetcodeClient.userExists(leetcodeUserName)) return {
-    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-    data: {
-      flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-      components: [
-        {
-          type: MessageComponentTypes.TEXT_DISPLAY,
-          content: `The Leetcode account \`${leetcodeUserName}\` does not exist!`,
-        },
-      ],
-    },
+    flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+    components: [
+      {
+        type: MessageComponentTypes.TEXT_DISPLAY,
+        content: `The Leetcode account \`${leetcodeUserName}\` does not exist!`,
+      },
+    ],
   }
 
   const db = getConnection();
@@ -48,16 +45,13 @@ export const bindUserHandler: CommandHandler = async (payload) => {
     update.run(leetcodeUserName, userId);
   }
   return {
-    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-    data: {
-      flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-      components: [
-        {
-          type: MessageComponentTypes.TEXT_DISPLAY,
-          content: `Successfully bind <@${userId}> to the Leetcode account \`${leetcodeUserName}\`.`,
-        },
-      ],
-    },
+    flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+    components: [
+      {
+        type: MessageComponentTypes.TEXT_DISPLAY,
+        content: `Successfully bind <@${userId}> to the Leetcode account \`${leetcodeUserName}\`.`,
+      },
+    ],
   };
 
 }

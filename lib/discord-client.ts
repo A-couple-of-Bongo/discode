@@ -1,3 +1,5 @@
+import { InteractionResponseType } from "discord-interactions";
+
 export class DiscordClient {
   static baseUrl = 'https://discord.com/api/v10/';
   static appId: string = process.env.APP_ID!;
@@ -77,5 +79,30 @@ export class DiscordClient {
     });
 
     return message;
+  }
+
+  static async deferInteractionReply(interactionId: string, interactionToken: string) {
+    await DiscordClient.fetch(`interactions/${interactionId}/${interactionToken}/callback`, {
+      method: 'POST',
+      body: JSON.stringify({
+        type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
+      }),
+    });
+  }
+
+  static async answerDeferredInteraction(interactionToken: string, message: object) {
+    await DiscordClient.fetch(`webhooks/${DiscordClient.appId}/${interactionToken}/messages/@original`, {
+      method: 'PATCH',
+      body: JSON.stringify(message),
+    });
+  }
+
+  static async cancelDeferredInteraction(interactionToken: string) {
+    await DiscordClient.fetch(`webhooks/${DiscordClient.appId}/${interactionToken}/messages/@original`, {
+      method: 'PATCH',
+      body: JSON.stringify({
+        content: 'The bot cancelled this response!',
+      }),
+    });
   }
 }

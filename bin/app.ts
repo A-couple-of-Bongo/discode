@@ -7,6 +7,7 @@ import { commandHandlers } from '../lib/commands';
 import morgan from 'morgan';
 import { jobs } from '../lib/cronjobs';
 import { logger } from '../lib/logger';
+import { DiscordClient } from '../lib/discord-client';
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -32,7 +33,7 @@ app.post('/interactions',
   ),
   verifyKeyMiddleware(process.env.PUBLIC_KEY!),
   async function(req, res) {
-    const { id, type, data } = req.body;
+    const { id, type, data, token } = req.body;
 
     if (type === InteractionType.PING) {
       return res.send({ type: InteractionResponseType.PONG });
@@ -44,7 +45,20 @@ app.post('/interactions',
         logger.error(`Unknown command: ${name}`);
         return res.status(400).json({ error: 'Unknown command' });
       }
-      return res.send(await commandHandlers[name]!(req.body));
+      await DiscordClient.deferInteractionReply(id, token);
+      res.status(200).send();
+      try {
+        const response = await commandHandlers[name]!(req.body);
+        if (response) {
+          await DiscordClient.answerDeferredInteraction(token, response);
+        } else {
+          await DiscordClient.cancelDeferredInteraction(token);
+        }
+      } catch (e) {
+        await DiscordClient.cancelDeferredInteraction(token);
+        throw e;
+      }
+      return;
     }
 
     logger.error(`Unknown interaction type: ${type}`);

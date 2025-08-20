@@ -54,22 +54,19 @@ const handleGetSubcommand = async () => {
   await takeScreenshotHtml(content);
 
   return {
-    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-    data: {
-      flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-      components: [
-        {
-          type: MessageComponentTypes.TEXT_DISPLAY,
-          content: `Daily challenge's link: ${link}`,
-        },
-        {
-          type: MessageComponentTypes.MEDIA_GALLERY,
-          items: [
-            { media: { url: `${process.env.HOST_URL!}/daily-question.png` } },
-          ],
-        },
-      ],
-    },
+    flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+    components: [
+      {
+        type: MessageComponentTypes.TEXT_DISPLAY,
+        content: `Daily challenge's link: ${link}`,
+      },
+      {
+        type: MessageComponentTypes.MEDIA_GALLERY,
+        items: [
+          { media: { url: `${process.env.HOST_URL!}/daily-question.png` } },
+        ],
+      },
+    ],
   };
 }
 
@@ -79,29 +76,23 @@ const handleMySolutionSubcommand = async (payload: any) => {
   const db = getConnection();
   const leetcodeName = db.prepare(`SELECT leetcode_account FROM users WHERE id = ?`).all(userId)?.[0]?.['leetcode_account'];
   if (!leetcodeName) return {
-    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-    data: {
-      flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-      components: [
-        {
-          type: MessageComponentTypes.TEXT_DISPLAY,
-          content: `Please bind your account first!`,
-        },
-      ],
-    }
+    flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+    components: [
+      {
+        type: MessageComponentTypes.TEXT_DISPLAY,
+        content: `Please bind your account first!`,
+      },
+    ],
   };
   const solution = await LeetcodeClient.getUserSolutionForDaily(leetcodeName as string);
   if (!solution) return {
-    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-    data: {
-      flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-      components: [
-        {
-          type: MessageComponentTypes.TEXT_DISPLAY,
-          content: `You haven't solved today problem!`,
-        },
-      ],
-    }
+    flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+    components: [
+      {
+        type: MessageComponentTypes.TEXT_DISPLAY,
+        content: `You haven't solved today problem!`,
+      },
+    ],
   };
 
   return formatSolution(leetcodeName as string, solution);
@@ -113,29 +104,23 @@ const handleYourSolutionSubcommand = async (payload: any) => {
   const db = getConnection();
   const leetcodeName = db.prepare(`SELECT leetcode_account FROM users WHERE id = ?`).all(targetUserId)?.[0]?.['leetcode_account'];
   if (!leetcodeName) return {
-    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-    data: {
-      flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-      components: [
-        {
-          type: MessageComponentTypes.TEXT_DISPLAY,
-          content: `This user hasn't bind their account!`,
-        },
-      ],
-    }
+    flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+    components: [
+      {
+        type: MessageComponentTypes.TEXT_DISPLAY,
+        content: `This user hasn't bind their account!`,
+      },
+    ],
   };
   const solution = await LeetcodeClient.getUserSolutionForDaily(leetcodeName as string);
   if (!solution) return {
-    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-    data: {
-      flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-      components: [
-        {
-          type: MessageComponentTypes.TEXT_DISPLAY,
-          content: `This user hasn't solved today problem!`,
-        },
-      ],
-    }
+    flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+    components: [
+      {
+        type: MessageComponentTypes.TEXT_DISPLAY,
+        content: `This user hasn't solved today problem!`,
+      },
+    ],
   };
 
   return formatSolution(leetcodeName as string, solution);
@@ -185,37 +170,34 @@ function formatSolution(username: string, solution: UserSubmission) {
   };
 
   return {
-    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-    data: {
-      flags: InteractionResponseFlags.IS_COMPONENTS_V2,
-      components: [
-        {
-          type: MessageComponentTypes.CONTAINER,
-          accent_color: 703487,
-          components: [
-            {
-              type: MessageComponentTypes.TEXT_DISPLAY,
-              content: `# ${username}'s solution
+    flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+    components: [
+      {
+        type: MessageComponentTypes.CONTAINER,
+        accent_color: 703487,
+        components: [
+          {
+            type: MessageComponentTypes.TEXT_DISPLAY,
+            content: `# ${username}'s solution
 **Submission ID:** \`${solution.id}\`
 **Submitted:** ${formattedTime}
 **Status:** Accepted ✅
 **Link:** ${solution.url}`,
-            },
-            {
-              type: MessageComponentTypes.SEPARATOR,
-              divider: true,
-              spacing: 1,
-            },
-            {
-              type: MessageComponentTypes.TEXT_DISPLAY,
-              content: `## Details
+          },
+          {
+            type: MessageComponentTypes.SEPARATOR,
+            divider: true,
+            spacing: 1,
+          },
+          {
+            type: MessageComponentTypes.TEXT_DISPLAY,
+            content: `## Details
 **Language:** ${_.capitalize(solution.lang)} ${getLanguageEmoji(solution.lang)}
 **Runtime:** ${solution.runtime}
 **Memory:** ${solution.memory}`
-            },
-          ],
-        }
-      ]
-    },
+          },
+        ],
+      }
+    ]
   };
 }
