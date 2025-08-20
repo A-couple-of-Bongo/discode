@@ -6,7 +6,7 @@ export class DiscordClient {
 
   static async fetch(endpoint: string, options: RequestInit): ReturnType<typeof fetch> {
     const url = DiscordClient.baseUrl + endpoint;
-    return fetch(url, {
+    return await fetch(url, {
       headers: {
         Authorization: `Bot ${process.env.DISCORD_TOKEN}`,
         'Content-Type': 'application/json; charset=UTF-8',
@@ -18,22 +18,22 @@ export class DiscordClient {
   }
 
   static async installGlobalCommand(command: object) {
-    return DiscordClient.fetch(`applications/${DiscordClient.appId}/commands`, { method: 'POST', body: JSON.stringify(command), });
+    await DiscordClient.fetch(`applications/${DiscordClient.appId}/commands`, { method: 'POST', body: JSON.stringify(command), });
   }
 
   static async installGlobalCommands(commands: object[]) {
-    return DiscordClient.fetch(`applications/${DiscordClient.appId}/commands`, {
+    await DiscordClient.fetch(`applications/${DiscordClient.appId}/commands`, {
       method: 'PUT',
       body: JSON.stringify(commands),
     });
   }
 
   static async deleteAllGlobalCommands() {
-    return DiscordClient.fetch(`applications/${DiscordClient.appId}/commands`, { method: 'PUT', body: JSON.stringify({}) });
+    await DiscordClient.fetch(`applications/${DiscordClient.appId}/commands`, { method: 'PUT', body: JSON.stringify({}) });
   }
 
   static async createForumThread(forumChannelId: string, post: object) {
-    return DiscordClient.fetch(`channels/${forumChannelId}/threads`, {
+    await DiscordClient.fetch(`channels/${forumChannelId}/threads`, {
       method: 'POST',
       body: JSON.stringify(post),
     });
@@ -56,7 +56,7 @@ export class DiscordClient {
     const existingTags = channel.available_tags || [];
     const updatedTags = [...existingTags, ...tags];
 
-    return DiscordClient.fetch(`channels/${forumChannelId}`, {
+    await DiscordClient.fetch(`channels/${forumChannelId}`, {
       method: 'PATCH',
       body: JSON.stringify({
         available_tags: updatedTags
@@ -65,20 +65,12 @@ export class DiscordClient {
   }
 
   static async deleteAllForumTags(forumChannelId: string) {
-    return DiscordClient.fetch(`channels/${forumChannelId}`, {
+    await DiscordClient.fetch(`channels/${forumChannelId}`, {
       method: 'PATCH',
       body: JSON.stringify({
         available_tags: []
       }),
     });
-  }
-
-  static async getMessage(channelId: string, messageId: string) {
-    const message = await DiscordClient.fetch(`channels/${channelId}/messages/${messageId}`, {
-      method: 'GET',
-    });
-
-    return message;
   }
 
   static async deferInteractionReply(interactionId: string, interactionToken: string) {
