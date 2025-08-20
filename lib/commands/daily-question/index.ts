@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { InteractionResponseFlags, MessageComponentTypes } from 'discord-interactions';
-import { CommandHandler } from '..';
+import { InteractionCommandHandler, InteractionCommandResponse } from '..';
 import { LeetcodeClient, UserSubmission } from '../../leetcode-client';
 import { getConnection } from '../../db';
 
@@ -26,7 +26,7 @@ export const dailyQuestionCommand = {
         {
           type: 9, // USER
           name: 'user',
-          description: 'The target user.',
+          description: 'The target user',
           required: true,
         }
       ],
@@ -34,7 +34,7 @@ export const dailyQuestionCommand = {
   ]
 }
 
-export const dailyQuestionHandler: CommandHandler = async (payload) => {
+export const dailyQuestionHandler: InteractionCommandHandler = async (payload) => {
   const subcommand = payload.data?.options?.[0]?.name;
 
   if (subcommand === 'get') {
@@ -55,7 +55,7 @@ const handleGetSubcommand = async () => {
     flags: InteractionResponseFlags.IS_COMPONENTS_V2,
     components: [
       {
-        type: MessageComponentTypes.TEXT_DISPLAY,
+        type: MessageComponentTypes.TEXT_DISPLAY as const,
         content: `Daily challenge's link: ${link}`,
       },
     ],
@@ -71,7 +71,7 @@ const handleMySolutionSubcommand = async (payload: any) => {
     flags: InteractionResponseFlags.IS_COMPONENTS_V2,
     components: [
       {
-        type: MessageComponentTypes.TEXT_DISPLAY,
+        type: MessageComponentTypes.TEXT_DISPLAY as const,
         content: `Please bind your account first!`,
       },
     ],
@@ -81,7 +81,7 @@ const handleMySolutionSubcommand = async (payload: any) => {
     flags: InteractionResponseFlags.IS_COMPONENTS_V2,
     components: [
       {
-        type: MessageComponentTypes.TEXT_DISPLAY,
+        type: MessageComponentTypes.TEXT_DISPLAY as const,
         content: `You haven't solved today problem!`,
       },
     ],
@@ -99,7 +99,7 @@ const handleYourSolutionSubcommand = async (payload: any) => {
     flags: InteractionResponseFlags.IS_COMPONENTS_V2,
     components: [
       {
-        type: MessageComponentTypes.TEXT_DISPLAY,
+        type: MessageComponentTypes.TEXT_DISPLAY as const,
         content: `This user hasn't bind their account!`,
       },
     ],
@@ -109,7 +109,7 @@ const handleYourSolutionSubcommand = async (payload: any) => {
     flags: InteractionResponseFlags.IS_COMPONENTS_V2,
     components: [
       {
-        type: MessageComponentTypes.TEXT_DISPLAY,
+        type: MessageComponentTypes.TEXT_DISPLAY as const,
         content: `This user hasn't solved today problem!`,
       },
     ],
@@ -118,7 +118,7 @@ const handleYourSolutionSubcommand = async (payload: any) => {
   return formatSolution(leetcodeName as string, solution);
 }
 
-function formatSolution(username: string, solution: UserSubmission) {
+function formatSolution(username: string, solution: UserSubmission): InteractionCommandResponse {
   const submissionDate = new Date(parseInt(solution.timestamp) * 1000);
   const formattedTime = submissionDate.toLocaleTimeString();
 

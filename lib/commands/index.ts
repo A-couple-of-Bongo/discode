@@ -1,3 +1,4 @@
+import { InteractionResponseFlags, MessageComponent } from 'discord-interactions';
 import { aboutMeCommand, aboutMeHandler } from './about-me';
 import { aboutYouCommand, aboutYouHandler } from './about-you';
 import { bindUserCommand, bindUserHandler } from './bind-user';
@@ -7,9 +8,14 @@ import { notifyCommand, notifyHandler } from './notify';
 import { pingCommand, pingHandler } from './ping';
 import { userCommand, userHandler } from './user';
 
-export type CommandHandler = (payload: any) => Promise<object | undefined>;
+export interface InteractionCommandResponse {
+  flags: InteractionResponseFlags,
+  components: MessageComponent[],
+}
 
-export const commandHandlers: Record<string, CommandHandler> = {
+export type InteractionCommandHandler = (payload: any) => Promise<InteractionCommandResponse>;
+
+export const commandHandlers: Record<string, InteractionCommandHandler> = {
   'ping': pingHandler,
   'daily-question': dailyQuestionHandler,
   'notify': notifyHandler,

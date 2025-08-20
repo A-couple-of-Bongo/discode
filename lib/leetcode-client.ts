@@ -38,13 +38,6 @@ export const UserSchema = z.object({
       })
     ),
   }),
-  userContestRanking: z.object({
-    attendedContestsCount: z.number(),
-    rating: z.number(),
-    globalRanking: z.number(),
-    totalParticipants: z.number(),
-    topPercentage: z.number(),
-  }),
 });
 
 export const TagSchema = z.object({
@@ -169,18 +162,7 @@ export class LeetcodeClient {
       return undefined;
     }
 
-    const userWithContest = {
-      ...userData,
-      userContestRanking: (json as any)?.data?.userContestRanking || {
-        attendedContestsCount: 0,
-        rating: 0,
-        globalRanking: 0,
-        totalParticipants: 0,
-        topPercentage: 0,
-      },
-    };
-
-    return UserSchema.parse(userWithContest);
+    return UserSchema.parse(userData);
   }
 
   static async userExists(username: string): Promise<boolean> {

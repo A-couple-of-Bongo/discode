@@ -1,5 +1,5 @@
 import { InteractionResponseFlags, MessageComponentTypes } from 'discord-interactions';
-import { CommandHandler } from '..';
+import { InteractionCommandHandler } from '..';
 import { getConnection } from '../../db';
 import { fetchUser } from '../user';
 
@@ -8,9 +8,17 @@ export const aboutMeCommand = {
   description: 'Get my Leetcode profile.',
 };
 
-export const aboutMeHandler: CommandHandler = async (payload) => {
+export const aboutMeHandler: InteractionCommandHandler = async (payload) => {
   const userId = payload?.member?.user?.id;
-  if (!userId) return;
+  if (!userId) return {
+    flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+    components: [
+      {
+        type: MessageComponentTypes.TEXT_DISPLAY,
+        content: 'Missing user id!',
+      },
+    ],
+  }
   const db = getConnection();
 
   const leetcodeName = db.prepare(`SELECT leetcode_account FROM users WHERE id = ?`).all(userId)?.[0]?.['leetcode_account'];
@@ -19,7 +27,7 @@ export const aboutMeHandler: CommandHandler = async (payload) => {
     components: [
       {
         type: MessageComponentTypes.TEXT_DISPLAY,
-        content: `Please bind your account first!`,
+        content: 'Please bind your account first!',
       },
     ],
   };

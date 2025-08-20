@@ -1,5 +1,5 @@
 import { InteractionResponseFlags, MessageComponentTypes } from 'discord-interactions';
-import { CommandHandler } from '..';
+import { InteractionCommandHandler } from '..';
 import { getConnection } from '../../db';
 import { DiscordClient } from '../../discord-client';
 import { LeetcodeClient } from '../../leetcode-client';
@@ -10,32 +10,40 @@ export const notifyCommand = {
   options: [
     {
       name: 'channel',
-      description: 'The channel to send LeetCode notifications to.',
+      description: 'The channel to send LeetCode notifications to',
       type: 7, // CHANNEL
       required: true,
     },
     {
       name: 'role',
-      description: 'The role to ping.',
+      description: 'The role to ping',
       type: 8, // ROLE
       required: true,
     },
     {
       name: 'text',
-      description: 'The text used for notification.',
+      description: 'The text used for notification',
       type: 3, // STRING
       required: false,
     },
   ],
 };
 
-export const notifyHandler: CommandHandler = async ({ data }) => {
+export const notifyHandler: InteractionCommandHandler = async ({ data }) => {
   const channelId = data?.options[0]?.value;
   const roleId = data?.options[1]?.value;
   const message = data?.options[2]?.value || 'Go go go!';
   const serverId = data?.resolved?.channels?.[channelId]?.guild_id;
   if (!channelId || !serverId) {
-    return;
+    return {
+      flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+      components: [
+        {
+          type: MessageComponentTypes.TEXT_DISPLAY,
+          content: 'Missing channel id and server id!',
+        },
+      ],
+    }
   }
   const db = getConnection();
   const upsert = db.prepare(`

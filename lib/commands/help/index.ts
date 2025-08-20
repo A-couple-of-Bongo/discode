@@ -1,12 +1,12 @@
 import { InteractionResponseFlags, MessageComponentTypes } from 'discord-interactions';
-import { CommandHandler } from '..';
+import { InteractionCommandHandler } from '..';
 
 export const helpCommand = {
   name: 'help',
   description: 'Get usage guidance.',
 };
 
-export const helpHandler: CommandHandler = async () => {
+export const helpHandler: InteractionCommandHandler = async () => {
   return {
     flags: InteractionResponseFlags.IS_COMPONENTS_V2,
     components: [

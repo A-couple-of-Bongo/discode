@@ -1,5 +1,5 @@
 import { InteractionResponseFlags, MessageComponentTypes } from 'discord-interactions';
-import { CommandHandler } from '..';
+import { InteractionCommandHandler, InteractionCommandResponse } from '..';
 import { LeetcodeClient } from '../../leetcode-client';
 
 export const userCommand = {
@@ -8,20 +8,28 @@ export const userCommand = {
   options: [
     {
       name: 'username',
-      description: 'The Leetcode\'s username.',
+      description: 'The Leetcode\'s username',
       type: 3, // STRING
       required: true,
     },
   ],
 };
 
-export const userHandler: CommandHandler = async ({ data }) => {
+export const userHandler: InteractionCommandHandler = async ({ data }) => {
   const username = data?.options[0]?.value;
-  if (!username) return;
+  if (!username) return {
+    flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+    components: [
+      {
+        type: MessageComponentTypes.TEXT_DISPLAY,
+        content: 'Missing username!',
+      },
+    ],
+  }
   return await fetchUser(username);
 }
 
-export async function fetchUser(name: string) {
+export async function fetchUser(name: string): Promise<InteractionCommandResponse> {
   const user = await LeetcodeClient.getUser(name);
   if (!user) {
     return {
@@ -46,9 +54,6 @@ export async function fetchUser(name: string) {
   const easyBeats = beatsStats.find((stat: any) => stat.difficulty === 'Easy')?.percentage || 0;
   const mediumBeats = beatsStats.find((stat: any) => stat.difficulty === 'Medium')?.percentage || 0;
   const hardBeats = beatsStats.find((stat: any) => stat.difficulty === 'Hard')?.percentage || 0;
-
-  const contestRanking = user.userContestRanking || {};
-  const hasContestData = contestRanking.attendedContestsCount && contestRanking.attendedContestsCount > 0;
 
   return {
     flags: InteractionResponseFlags.IS_COMPONENTS_V2,
@@ -97,24 +102,6 @@ export async function fetchUser(name: string) {
             type: MessageComponentTypes.TEXT_DISPLAY,
             content: `🔴 **Hard**: ${hardStats.count.toLocaleString()} solved (beats ${hardBeats.toFixed(1)}%)`,
           },
-          ...(hasContestData ? [
-            {
-              type: MessageComponentTypes.TEXT_DISPLAY,
-              content: `## 🏆 Contest Performance`,
-            },
-            {
-              type: MessageComponentTypes.TEXT_DISPLAY,
-              content: `**Rating**: ${Math.round(contestRanking.rating || 0)} (Top ${(contestRanking.topPercentage || 0).toFixed(1)}%)`,
-            },
-            {
-              type: MessageComponentTypes.TEXT_DISPLAY,
-              content: `**Global Ranking**: #${(contestRanking.globalRanking || 0).toLocaleString()} / ${(contestRanking.totalParticipants || 0).toLocaleString()}`,
-            },
-            {
-              type: MessageComponentTypes.TEXT_DISPLAY,
-              content: `**Contests Attended**: ${(contestRanking.attendedContestsCount || 0).toLocaleString()}`,
-            }
-          ] : []),
         ],
       },
     ],

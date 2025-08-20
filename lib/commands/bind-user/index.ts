@@ -1,5 +1,5 @@
 import { InteractionResponseFlags, MessageComponentTypes } from 'discord-interactions';
-import { CommandHandler } from '..';
+import { InteractionCommandHandler } from '..';
 import { getConnection } from '../../db';
 import { LeetcodeClient } from '../../leetcode-client';
 
@@ -9,17 +9,25 @@ export const bindUserCommand = {
   options: [
     {
       name: 'username',
-      description: 'The Leetcode\'s username.',
+      description: 'The Leetcode\'s username',
       type: 3, // STRING
       required: true,
     },
   ],
 };
 
-export const bindUserHandler: CommandHandler = async (payload) => {
+export const bindUserHandler: InteractionCommandHandler = async (payload) => {
   const userId = payload?.member?.user?.id;
   const leetcodeUserName = payload?.data?.options?.[0]?.value;
-  if (!userId || !leetcodeUserName) return;
+  if (!userId || !leetcodeUserName) return {
+    flags: InteractionResponseFlags.IS_COMPONENTS_V2,
+    components: [
+      {
+        type: MessageComponentTypes.TEXT_DISPLAY,
+        content: 'Missing user id and leetcode username!',
+      },
+    ],
+  }
   if (!await LeetcodeClient.userExists(leetcodeUserName)) return {
     flags: InteractionResponseFlags.IS_COMPONENTS_V2,
     components: [

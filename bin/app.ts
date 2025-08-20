@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import fs from 'fs';
 import express from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import nodeCron from 'node-cron';
 import { InteractionResponseType, InteractionType, verifyKeyMiddleware } from 'discord-interactions';
 import { commandHandlers } from '../lib/commands';
@@ -66,7 +67,7 @@ app.post('/interactions',
   }
 );
 
-app.use((err: any, req: any, res: any, next: any) => {
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   logger.error(err);
 })
 
