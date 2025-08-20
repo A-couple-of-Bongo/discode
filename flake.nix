@@ -40,7 +40,7 @@
 
             echo
             echo -e "\e[1mChecking for ./data directory...\e[0m"
-            if [[ ! -f ./data/ ]]; then
+            if [[ ! -d ./data/ ]]; then
               echo -e "\e[1mCreating ./data directory...\e[0m"
               mkdir data
             fi
