@@ -41,15 +41,16 @@ app.post('/interactions',
     if (type === InteractionType.APPLICATION_COMMAND) {
       const { name } = data;
       if (!commandHandlers[name]) {
-        console.error(`Unknown command: ${name}`);
+        logger.error(`Unknown command: ${name}`);
         return res.status(400).json({ error: 'Unknown command' });
       }
       return res.send(await commandHandlers[name]!(req.body));
     }
 
-    console.error(`Unknown interaction type: ${type}`);
+    logger.error(`Unknown interaction type: ${type}`);
     return res.status(400).json({ error: 'Unknown interaction' });
-  });
+  }
+);
 
 app.use((err: any, req: any, res: any, next: any) => {
   logger.error(err);
