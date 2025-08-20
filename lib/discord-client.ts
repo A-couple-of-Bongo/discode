@@ -1,4 +1,5 @@
 import { InteractionResponseType } from "discord-interactions";
+import { Tag } from "./leetcode-client";
 
 export class DiscordClient {
   static baseUrl = 'https://discord.com/api/v10/';
@@ -39,7 +40,7 @@ export class DiscordClient {
     });
   }
 
-  static async getForumTags(forumChannelId: string) {
+  static async getForumTags(forumChannelId: string): Promise<(Tag & { id: string })[]> {
     const response = await DiscordClient.fetch(`channels/${forumChannelId}`, {
       method: 'GET',
     });
@@ -47,7 +48,7 @@ export class DiscordClient {
     return channel.available_tags || [];
   }
 
-  static async createForumTags(forumChannelId: string, tags: { name: string, emoji_name?: string }[]) {
+  static async createForumTags(forumChannelId: string, tags: Tag[]) {
     const response = await DiscordClient.fetch(`channels/${forumChannelId}`, {
       method: 'GET',
     });
