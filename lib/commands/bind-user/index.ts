@@ -31,19 +31,11 @@ export const bindUserHandler: CommandHandler = async (payload) => {
   }
 
   const db = getConnection();
-  try {
-    const insert = db.prepare(`
-    INSERT INTO users(leetcode_account, id) VALUES(?, ?);
+  const upsert = db.prepare(`
+    INSERT OR REPLACE INTO users(leetcode_account, id) VALUES(?, ?);
     `);
-    insert.run(leetcodeUserName, userId);
-  } catch {
-    const update = db.prepare(`
-      UPDATE users
-      SET leetcode_account = ?
-      WHERE id = ?;
-    `)
-    update.run(leetcodeUserName, userId);
-  }
+  upsert.run(leetcodeUserName, userId);
+
   return {
     flags: InteractionResponseFlags.IS_COMPONENTS_V2,
     components: [

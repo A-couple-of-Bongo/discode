@@ -38,19 +38,10 @@ export const notifyHandler: CommandHandler = async ({ data }) => {
     return;
   }
   const db = getConnection();
-  try {
-    const insert = db.prepare(`
-    INSERT INTO servers(notified_channel_id, notified_role_id, notification_text, server_id) VALUES(?, ?, ?, ?);
-    `);
-    insert.run(channelId, roleId, message, serverId);
-  } catch {
-    const update = db.prepare(`
-      UPDATE servers
-      SET notified_channel_id = ?, notified_role_id = ?, notification_text = ?
-      WHERE server_id = ?;
-    `)
-    update.run(channelId, roleId, message, serverId);
-  }
+  const upsert = db.prepare(`
+    INSERT OR REPLACE INTO servers(notified_channel_id, notified_role_id, notification_text, server_id) VALUES(?, ?, ?, ?);
+  `);
+  upsert.run(channelId, roleId, message, serverId);
 
   await DiscordClient.deleteAllForumTags(channelId);
   await DiscordClient.createForumTags(channelId, LeetcodeClient.getTags());
