@@ -18,7 +18,7 @@ export const userCommand = {
 export const userHandler: CommandHandler = async ({ data }) => {
   const username = data?.options[0]?.value;
   if (!username) return;
-  return fetchUser(username);
+  return await fetchUser(username);
 }
 
 export async function fetchUser(name: string) {
