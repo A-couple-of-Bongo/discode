@@ -44,16 +44,16 @@ export async function fetchUser(name: string): Promise<InteractionCommandRespons
   }
 
   const problemStats = user.submitStatsGlobal?.acSubmissionNum || [];
-  const easyStats = problemStats.find((stat: any) => stat.difficulty === 'Easy') || { count: 0, submissions: 0 };
-  const mediumStats = problemStats.find((stat: any) => stat.difficulty === 'Medium') || { count: 0, submissions: 0 };
-  const hardStats = problemStats.find((stat: any) => stat.difficulty === 'Hard') || { count: 0, submissions: 0 };
+  const easyStats = problemStats.find((stat) => stat.difficulty === 'Easy') || { count: 0, submissions: 0 };
+  const mediumStats = problemStats.find((stat) => stat.difficulty === 'Medium') || { count: 0, submissions: 0 };
+  const hardStats = problemStats.find((stat) => stat.difficulty === 'Hard') || { count: 0, submissions: 0 };
 
   const totalSolved = easyStats.count + mediumStats.count + hardStats.count;
 
   const beatsStats = user.problemsSolvedBeatsStats || [];
-  const easyBeats = beatsStats.find((stat: any) => stat.difficulty === 'Easy')?.percentage || 0;
-  const mediumBeats = beatsStats.find((stat: any) => stat.difficulty === 'Medium')?.percentage || 0;
-  const hardBeats = beatsStats.find((stat: any) => stat.difficulty === 'Hard')?.percentage || 0;
+  const easyBeats = beatsStats.find((stat) => stat.difficulty === 'Easy')?.percentage || 0;
+  const mediumBeats = beatsStats.find((stat) => stat.difficulty === 'Medium')?.percentage || 0;
+  const hardBeats = beatsStats.find((stat) => stat.difficulty === 'Hard')?.percentage || 0;
 
   return {
     flags: InteractionResponseFlags.IS_COMPONENTS_V2,

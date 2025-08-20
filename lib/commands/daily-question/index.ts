@@ -49,7 +49,7 @@ export const dailyQuestionHandler: InteractionCommandHandler = async (payload) =
 }
 
 const handleGetSubcommand = async () => {
-  const { link } = await LeetcodeClient.getDailyQuestion() as any;
+  const { link } = await LeetcodeClient.getDailyQuestion();
 
   return {
     flags: InteractionResponseFlags.IS_COMPONENTS_V2,
