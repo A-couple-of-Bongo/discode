@@ -77,6 +77,12 @@ app.listen(PORT, () => {
   console.log('* Cron jobs starting up')
   for (const job of jobs) {
     console.log('** Starting cron job', job.name);
-    nodeCron.schedule(job.schedule, job.callback);
+    nodeCron.schedule(job.schedule, () => {
+      try {
+        job.callback();
+      } catch (e) {
+        logger.error(e);
+      }
+    });
   }
 })
