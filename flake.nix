@@ -28,12 +28,23 @@
             git
           ];
 
+          DATABASE_FILEPATH="${builtins.getEnv "PWD"}/data/sqlite.db";
+          DATABASE_URL="sqlite3://${builtins.getEnv "PWD"}/data/sqlite.db";
+
           shellHook = ''
             echo -e "\e[1mWelcome to discode!\e[0m"
             echo
+
             echo -e "\e[1mInstalling dependencies...\e[0m"
             npm install
+
             echo
+            echo -e "\e[1mChecking for ./data directory...\e[0m"
+            if [[ ! -f ./data/ ]]; then
+              echo -e "\e[1mCreating ./data directory...\e[0m"
+              mkdir data
+            fi
+
             echo -e "\e[1mRunning migrations...\e[0m"
             npm run migration:up
           '';
