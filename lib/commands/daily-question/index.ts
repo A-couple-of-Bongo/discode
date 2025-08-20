@@ -1,6 +1,5 @@
-import puppeteer from 'puppeteer';
 import _ from 'lodash';
-import { InteractionResponseFlags, InteractionResponseType, MessageComponentTypes } from 'discord-interactions';
+import { InteractionResponseFlags, MessageComponentTypes } from 'discord-interactions';
 import { CommandHandler } from '..';
 import { LeetcodeClient, UserSubmission } from '../../leetcode-client';
 import { getConnection } from '../../db';
@@ -50,8 +49,7 @@ export const dailyQuestionHandler: CommandHandler = async (payload) => {
 }
 
 const handleGetSubcommand = async () => {
-  const { link, question: { content } } = await LeetcodeClient.getDailyQuestion() as any;
-  await takeScreenshotHtml(content);
+  const { link } = await LeetcodeClient.getDailyQuestion() as any;
 
   return {
     flags: InteractionResponseFlags.IS_COMPONENTS_V2,
@@ -59,12 +57,6 @@ const handleGetSubcommand = async () => {
       {
         type: MessageComponentTypes.TEXT_DISPLAY,
         content: `Daily challenge's link: ${link}`,
-      },
-      {
-        type: MessageComponentTypes.MEDIA_GALLERY,
-        items: [
-          { media: { url: `${process.env.HOST_URL!}/daily-question.png` } },
-        ],
       },
     ],
   };
@@ -125,23 +117,6 @@ const handleYourSolutionSubcommand = async (payload: any) => {
 
   return formatSolution(leetcodeName as string, solution);
 }
-
-const takeScreenshotHtml = async (htmlContent: string) => {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  const styledHtml = `
-    <style>
-      * { text-wrap: wrap; }
-    </style>
-    <div style="width: 1080px; padding: 8px;">
-      ${htmlContent}
-    </div>
-  `;
-  await page.setViewport({ width: 1080, height: 800 });
-  await page.setContent(styledHtml, { waitUntil: 'networkidle0' });
-  await page.screenshot({ path: './public/daily-question.png', fullPage: true })
-  await browser.close();
-};
 
 function formatSolution(username: string, solution: UserSubmission) {
   const submissionDate = new Date(parseInt(solution.timestamp) * 1000);
