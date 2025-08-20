@@ -7,7 +7,13 @@ COPY lib/ ./lib/
 COPY bin/ ./bin
 COPY migrations/ ./migrations/
 
-RUN npm ci --only=production --ignore-scripts
+VOLUME [ "/app/data" ]
+RUN mkdir /app/data
+
+ENV DATABASE_FILEPATH=/app/data/sqlite.db
+ENV DATABASE_URL=sqlite3://app/data/sqlite.db
+
+RUN npm ci
 RUN npm run build
 RUN npm run migration:up
 
