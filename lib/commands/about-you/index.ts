@@ -1,7 +1,7 @@
 import { InteractionResponseFlags, MessageComponentTypes } from 'discord-interactions';
 import { InteractionCommandHandler } from '..';
 import { getConnection } from '../../db';
-import { fetchUser } from '../user';
+import { fetchUser } from '../about-me';
 
 export const aboutYouCommand = {
   name: 'about-you',

@@ -6,7 +6,6 @@ import { dailyQuestionCommand, dailyQuestionHandler } from './daily-question';
 import { helpCommand, helpHandler } from './help';
 import { notifyCommand, notifyHandler } from './notify';
 import { pingCommand, pingHandler } from './ping';
-import { userCommand, userHandler } from './user';
 
 export interface InteractionCommandResponse {
   flags: InteractionResponseFlags,
@@ -20,7 +19,6 @@ export const commandHandlers: Record<string, InteractionCommandHandler> = {
   'daily-question': dailyQuestionHandler,
   'notify': notifyHandler,
   'help': helpHandler,
-  'user': userHandler,
   'bind-user': bindUserHandler,
   'about-me': aboutMeHandler,
   'about-you': aboutYouHandler,
@@ -31,7 +29,6 @@ export const commands: Record<string, object> = {
   'daily-question': dailyQuestionCommand,
   'notify': notifyCommand,
   'help': helpCommand,
-  'user': userCommand,
   'bind-user': bindUserCommand,
   'about-me': aboutMeCommand,
   'about-you': aboutYouCommand,
