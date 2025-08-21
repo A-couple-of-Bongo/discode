@@ -8,7 +8,12 @@ export const dailyCronJob: CronJob = {
   schedule: '0 5 7 * * *',
   callback: async () => {
     const db = getConnection();
-    const contacts = db.prepare('SELECT notified_channel_id, notified_role_id, notification_text FROM servers;').all();
+    const contacts = db.prepare(`
+      SELECT notified_channel_id, notified_role_id, notification_text
+      FROM servers
+      WHERE notified_channel_id IS NOT NULL
+        AND notified_role_id IS NOT NULL;
+    `).all();
     const dailyQuestionData = await LeetcodeClient.getDailyQuestion();
 
     for (const contact of contacts) {
