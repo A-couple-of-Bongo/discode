@@ -120,7 +120,7 @@ const handleYourSolutionSubcommand = async (payload: any) => {
 
 function formatSolution(username: string, solution: UserSubmission): InteractionCommandResponse {
   const submissionDate = new Date(parseInt(solution.timestamp) * 1000);
-  const formattedTime = submissionDate.toLocaleTimeString();
+  const formattedTime = submissionDate.toISOString().slice(11, 19);
 
   const getLanguageEmoji = (lang: string) => {
     const emojiMap: { [key: string]: string } = {
@@ -155,7 +155,7 @@ function formatSolution(username: string, solution: UserSubmission): Interaction
             type: MessageComponentTypes.TEXT_DISPLAY,
             content: `# ${username}'s solution
 **Submission ID:** \`${solution.id}\`
-**Submitted:** ${formattedTime}
+**Submitted:** ${formattedTime} UTC
 **Status:** Accepted ✅
 **Link:** ${solution.url}`,
           },
