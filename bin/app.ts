@@ -84,6 +84,8 @@ app.listen(PORT, () => {
       } catch (e) {
         logger.error(e);
       }
+    }, {
+      timezone: 'UTC',
     });
   }
 })

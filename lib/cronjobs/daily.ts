@@ -5,7 +5,7 @@ import { LeetcodeClient } from '../leetcode-client';
 
 export const dailyCronJob: CronJob = {
   name: 'daily-challenge',
-  schedule: '0 5 7 * * *',
+  schedule: '0 5 0 * * *',
   callback: async () => {
     const db = getConnection();
     const contacts = db.prepare(`
